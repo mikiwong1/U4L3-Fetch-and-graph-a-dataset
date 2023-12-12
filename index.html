@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script>
+    async function getData() {
+        const response = await fetch("test.csv");
+        const data = await response.text();
+        const rows = data.split("\n").slice(1);
+        rows.forEach((elem) => {
+            const row = elem.split(",");
+            const year = row[0];
+            const temp = row[1];
+            console.log(year, temp);
+        });
+      }
+
+      const ctx = document.getElementById('myChart');
+
+      const labels = Utils.months({count: 7});
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'My First Dataset',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+};
+//end of functions
+//call the function to test if you see the image on the left in the console
+
+</script>
+<body onload="getData()">
+    <canvas id="myChart"></canvas>
+</body>
+</html>

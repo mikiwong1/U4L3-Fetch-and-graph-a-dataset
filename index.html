@@ -1,58 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Document</title>
-</head>
-<script>
-
-  //JS
+  </head>
+  <script>
+    //JS
+    const arr = [];
+    const arr1 = [];
     async function getData() {
-        const response = await fetch("test.csv");
-        const data = await response.text();
-        const rows = data.split("\n").slice(1);
-        let arr = [];
-        rows.forEach((elem) => {
-            const row = elem.split(",");
-            const year = row[0];
-            const temp = row[1];
-            arr.push([year, temp]);
-            });
-
-        return arr;
+      const response = await fetch("test.csv");
+      const data = await response.text();
+      const rows = data.split("\n").slice(1);
+      rows.forEach((elem) => {
+        const row = elem.split(",");
+        const xcoord = row[16];
+        const ycoord = row[17];
+        arr.push(xcoord);
+        arr1.push(ycoord);
+      });
     }
 
-
     async function graph() {
-        let rows = await getData();
-        let temps = [];
-        let years = [];
-        rows.forEach(elem => temps.push(elem[1])+14);
-        rows.forEach(elem => years.push(elem[0]));
+      await getData();
+      console.log(arr1);
 
-        const ctx = document.getElementById('myChart');
+      const ctx = document.getElementById("myChart");
 
-        new Chart(ctx, {
-        type: 'line',
+      new Chart(ctx, {
+        type: "scatter",
         data: {
-            labels: years,
-            datasets: [{
-            label: 'TEMPERATURE',
-            data: temps,
-            borderColor: 'rgb(255, 0, 0)',
-            beginAtZero: false,
-            }]
+          labels: arr,
+          datasets: [
+            {
+              label: "SHOOTING",
+              data: arr1,
+              borderColor: "rgb(255, 0, 0)",
+              beginAtZero: false,
+            },
+          ],
         },
-        })
-      }
+        options: {
+          scales: {
+            y: {
+              beginAtZero: false,
+              suggestedMin: 150000,
+              suggestedMax: 300000,
+            },
+          },
+        },
+      });
+    }
 
     graph();
-</script>
-<body onload="getData()">
-  <!--HTML-->
-    <canvas id="myChart"></canvas>lp'
-</body>
+  </script>
+  <body onload="getData()">
+    <!--HTML-->
+    <canvas id="myChart"></canvas>
+  </body>
 </html>
